@@ -154,8 +154,8 @@ const Footer = () => {
                 <FaEnvelope className="text-blue-500 mt-1" />
                 <div>
                   <p className="text-white font-medium">Email</p>
-                  <a href="mailto:amankrr.info@gmail.com" className="hover:text-white transition">
-                    amankrr.info@gmail.com
+                  <a href="mailto:abishektjabishek@gmail.com" className="hover:text-white transition">
+                    abishektjabishek@gmail.com
                   </a>
                 </div>
               </li>
@@ -163,8 +163,8 @@ const Footer = () => {
                 <FaPhone className="text-green-500 mt-1" />
                 <div>
                   <p className="text-white font-medium">Phone</p>
-                  <a href="tel:+919876543210" className="hover:text-white transition">
-                    +91 98765 43210
+                  <a href="tel:+91755144339" className="hover:text-white transition">
+                    +91 755 144339
                   </a>
                 </div>
               </li>
@@ -172,7 +172,7 @@ const Footer = () => {
                 <FaMapMarkerAlt className="text-red-500 mt-1" />
                 <div>
                   <p className="text-white font-medium">Address</p>
-                  <p>Faridabad, Haryana</p>
+                  <p>Poonamallee, Chennai</p>
                 </div>
               </li>
             </ul>

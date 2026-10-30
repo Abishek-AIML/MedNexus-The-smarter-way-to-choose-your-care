@@ -3,21 +3,23 @@ import axios from 'axios';
 // 1. Detect environment automatically
 const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
-// 2. Direct Hardcoded Live Backend URL (Vercel dashboard ki zaroorat nahi)
 const LIVE_BACKEND_URL = 'https://mednexus-hospital-management.onrender.com'; 
 
-// 3. Smart Switcher: Agar local hai toh localhost, warna Render URL
-const API_URL = isLocalhost ? 'http://localhost:3000' : LIVE_BACKEND_URL;
+const configuredApiUrl = import.meta.env.VITE_API_URL;
+const API_URL = (configuredApiUrl || (isLocalhost ? '' : LIVE_BACKEND_URL))
+  .replace(/\/+$/, '');
 
-// Global Settings
+export const API_BASE_URL = `${API_URL}/api`;
+
 axios.defaults.baseURL = API_URL;
 axios.defaults.timeout = 10000;
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 
-// Interceptor (to catch any missed hardcoded localhost strings)
+const LEGACY_LOCAL_API_URL = 'http://localhost:3000';
+
 axios.interceptors.request.use((config) => {
-  if (config.url && config.url.includes('http://localhost:3000')) {
-    config.url = config.url.replace('http://localhost:3000', API_URL);
+  if (config.url?.startsWith(LEGACY_LOCAL_API_URL)) {
+    config.url = `${API_URL}${config.url.slice(LEGACY_LOCAL_API_URL.length)}`;
   }
   return config;
 }, (error) => {

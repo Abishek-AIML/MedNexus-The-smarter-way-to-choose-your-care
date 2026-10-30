@@ -1,14 +1,5 @@
 import axios from 'axios';
-
-// 🔥 BULLETPROOF TRICK: Check actual browser URL
-const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-
-// Tumhara Live Render Backend URL
-const LIVE_BACKEND_URL = 'https://mednexus-hospital-management.onrender.com';
-
-// Agar local pe ho toh localhost:3000/api chalega, Vercel par ho toh Render chalega.
-// (Bina kisi .env variable ke jhanjhat ke!)
-const API_BASE_URL = isLocalhost ? 'http://localhost:3000/api' : `${LIVE_BACKEND_URL}/api`;
+import { API_BASE_URL } from '../config/api';
 
 // Create axios instance
 const api = axios.create({

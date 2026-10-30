@@ -119,6 +119,9 @@ const Compare = () => {
             return fullData;
           } catch (err) {
             console.error('Error fetching:', item.name, err);
+            if (userLocation && item.location?.coordinates) {
+              item.distance = calculateDistance(userLocation.latitude, userLocation.longitude, item.location.coordinates[1], item.location.coordinates[0]);
+            }
             return item;
           }
         })

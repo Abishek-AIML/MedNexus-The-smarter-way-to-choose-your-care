@@ -103,14 +103,14 @@ router.post('/login', async (req, res) => {
 // ==========================================
 router.post('/register', async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, phone, password } = req.body;
     console.log('📝 Registration attempt:', email);
 
     // 1. Validation
-    if (!name || !email || !password) {
+    if (!name || !email || !phone || !password) {
       return res.status(400).json({
         success: false,
-        message: 'Please provide all required fields'
+        message: 'Please provide name, email, phone number, and password'
       });
     }
 
@@ -123,14 +123,12 @@ router.post('/register', async (req, res) => {
       });
     }
 
-    // 3. Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // 4. Create user
+    // The User model hashes passwords before saving.
     const user = await User.create({
       name,
       email,
-      password: hashedPassword,
+      phone,
+      password,
       role: 'user', // Default role
       isActive: true
     });
@@ -213,14 +211,11 @@ router.post('/register-owner', async (req, res) => {
       });
     }
 
-    // ✅ Hash password before saving (Ensures consistency with standard register)
-    const hashedPassword = await bcrypt.hash(password, 10);
-
     // Create owner (pending approval)
     const owner = await User.create({
       name,
       email,
-      password: hashedPassword,
+      password,
       phone,
       role: 'owner', // Still 'owner' but marked inactive/unverified until admin approval
       isActive: false, // Not active until admin approves
@@ -405,8 +400,7 @@ router.put('/change-password', protect, async (req, res) => {
       });
     }
 
-    // Hash and update new password
-    user.password = await bcrypt.hash(newPassword, 10);
+    user.password = newPassword;
     await user.save();
 
     console.log('✅ Password changed successfully for:', user.email);

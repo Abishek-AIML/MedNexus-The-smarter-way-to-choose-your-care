@@ -18,6 +18,7 @@ import { useComparison } from '../context/ComparisonContext';
 import { useLocation as useUserLocation } from '../context/LocationContext';
 import { calculateDistance } from '../utils/distance';
 import API_URL from '../config/api';
+import hospitalService from '../services/hospitalService';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 

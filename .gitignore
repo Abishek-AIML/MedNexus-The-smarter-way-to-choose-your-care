@@ -1,12 +1,11 @@
 # Dependencies
-node_modules/
-*/node_modules/
+**/node_modules/
 
 # Environment variables
 .env
-.env.local
-.env.*.local
-backend/.env
+.env.*
+!.env.example
+!.env.*.example
 
 # Build outputs
 dist/
@@ -17,6 +16,8 @@ frontend/build/
 # Logs
 *.log
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # OS files
 .DS_Store
@@ -31,6 +32,12 @@ Thumbs.db
 # Temporary files
 *.tmp
 .cache/
+.vite/
+coverage/
+
+# Deployment tooling
+.netlify/
+.vercel/
 
 # Database
 *.sqlite

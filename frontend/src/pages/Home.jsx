@@ -1,3 +1,5 @@
+import INITIAL_HOSPITALS from '../data/hospitalsData';
+import INITIAL_LABORATORIES from '../data/laboratoriesData';
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
@@ -181,12 +183,13 @@ const Home = () => {
           const normalizedHospitals = hospitalsDataArray.map(hospital => ({
             ...hospital, id: hospital._id || hospital.id
           }));
-          setHospitals(normalizedHospitals); 
+          setHospitals(normalizedHospitals.length > 0 ? normalizedHospitals : INITIAL_HOSPITALS); 
           sessionStorage.setItem('homeHospitalsData', JSON.stringify(normalizedHospitals));
           setLoading(false); 
         })
         .catch(error => {
-          console.error('❌ Hospitals fetch error:', error);
+          console.error('❌ Hospitals fetch error, using local dataset:', error);
+          setHospitals(INITIAL_HOSPITALS);
           setLoading(false); 
         });
 
@@ -196,7 +199,7 @@ const Home = () => {
           const normalizedLabs = labsDataArray.map(lab => ({
             ...lab, id: lab._id || lab.id
           }));
-          setLabs(normalizedLabs);
+          setLabs(normalizedLabs.length > 0 ? normalizedLabs : INITIAL_LABORATORIES);
           sessionStorage.setItem('homeLabsData', JSON.stringify(normalizedLabs));
         })
         .catch(error => console.error('❌ Labs fetch error:', error));

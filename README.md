@@ -35,13 +35,18 @@ cd mednexus-hospital-management
 
 cd backend
 npm install
-node seedData.js
+# Copy .env.example to .env, then set MONGO_URI and a private JWT_SECRET.
 npm run dev
 
 cd ../frontend
 npm install
+# Optionally copy .env.example to .env to set VITE_API_URL.
 npm run dev
 ```
+
+The backend defaults to port `3000`; set `PORT` in `backend/.env` to use another port. The frontend uses the Vite `/api` proxy locally and defaults to the backend on port `3000`. If you change the backend port, set `VITE_API_URL` in `frontend/.env` to the backend origin (for example, `http://localhost:5000`).
+
+Do not run `backend/seedData.js` against an existing database: it deletes all users, hospitals, and laboratories before inserting sample data.
 
 🔑 Default Credentials (For Demo Only)
 
@@ -49,8 +54,7 @@ Admin: admin@hospital.com
 Owner: owner@hospital.com  
 User: aman@example.com
   
-⚠️ Note: Passwords are not shared publicly.  
-Use seedData.js to generate test users.
+⚠️ Note: This repository does not include shared default passwords. Create accounts through the application or use a disposable database when testing seed data.
 ## 👨‍💻 Developer
 
 **Aman Kumar**  

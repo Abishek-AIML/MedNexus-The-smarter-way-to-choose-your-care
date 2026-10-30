@@ -79,7 +79,7 @@ const TermsOfService = () => {
                 <h2 className="text-xl font-bold text-gray-900 mb-3">9. Contact</h2>
                 <p>For questions about these Terms, contact us at:</p>
                 <p className="mt-2">Email: legal@mednexus.com</p>
-                <p>Phone: +91 98765 43210</p>
+                <p>Phone: +91 755 144339</p>
               </section>
             </div>
           </div>

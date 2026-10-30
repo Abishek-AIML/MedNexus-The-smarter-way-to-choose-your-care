@@ -341,7 +341,7 @@ const ContactUs = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-800">Email</h4>
-                    <p className="text-gray-600 text-sm">support@mednexus.com</p>
+                    <p className="text-gray-600 text-sm">abishektjabishek@gmail.com</p>
                   </div>
                 </div>
 
@@ -351,7 +351,7 @@ const ContactUs = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-800">Phone</h4>
-                    <p className="text-gray-600 text-sm">+91 98765 43210</p>
+                    <p className="text-gray-600 text-sm">+91 755 144339</p>
                   </div>
                 </div>
 
@@ -362,8 +362,7 @@ const ContactUs = () => {
                   <div>
                     <h4 className="font-semibold text-gray-800">Address</h4>
                     <p className="text-gray-600 text-sm">
-                      123 Healthcare Street<br />
-                      New Delhi, India 110001
+                      Poonamallee, Chennai
                     </p>
                   </div>
                 </div>

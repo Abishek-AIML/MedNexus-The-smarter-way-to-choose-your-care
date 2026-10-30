@@ -7,11 +7,12 @@ const {
   updateTest,
   deleteTest
 } = require('../controllers/testController');
+const { protect, admin } = require('../middleware/authMiddleware');
 
 router.get('/', getAllTests);
 router.get('/:id', getTestById);
-router.post('/', createTest);
-router.put('/:id', updateTest);
-router.delete('/:id', deleteTest);
+router.post('/', protect, admin, createTest);
+router.put('/:id', protect, admin, updateTest);
+router.delete('/:id', protect, admin, deleteTest);
 
 module.exports = router;

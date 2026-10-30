@@ -156,16 +156,16 @@ const AboutUs = () => {
                   <p className="flex items-center gap-3">
                     <span className="bg-white p-2 rounded-full shadow-sm"><FaInfoCircle className="text-blue-500" /></span>
                     <strong>Email:</strong> 
-                    <a href="mailto:support@mednexus.com" className="text-blue-600 hover:underline">amankrr.info@gmail.com</a>
+                    <a href="mailto:abishektjabishek@gmail.com" className="text-blue-600 hover:underline">abishektjabishek@gmail.com</a>
                   </p>
                   <p className="flex items-center gap-3">
                     <span className="bg-white p-2 rounded-full shadow-sm"><FaInfoCircle className="text-green-500" /></span>
                     <strong>Phone:</strong> 
-                    <a href="tel:+919876543210" className="text-blue-600 hover:underline">+91 98765 43210</a>
+                    <a href="tel:+91755144339" className="text-blue-600 hover:underline">+91 755 144339</a>
                   </p>
                   <p className="flex items-center gap-3">
                     <span className="bg-white p-2 rounded-full shadow-sm"><FaInfoCircle className="text-red-500" /></span>
-                    <strong>Address:</strong> Faridabad, Haryana, India
+                    <strong>Address:</strong> Poonamallee, Chennai
                   </p>
                 </div>
               </section>

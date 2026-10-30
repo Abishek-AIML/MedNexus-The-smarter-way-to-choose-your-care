@@ -8,6 +8,7 @@ dotenv.config({ path: path.join(__dirname, '.env') });
 // ========== Import Packages ==========
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
 const connectDB = require('./config/db');
 const { startSchedulers } = require('./services/scheduler'); 
 const http = require('http'); // 🔥 ADDED FOR PING
@@ -15,18 +16,6 @@ const https = require('https'); // 🔥 ADDED FOR PING
 
 // ========== Initialize Express App ==========
 const app = express();
-
-// ========== Connect Database ==========
-connectDB().then(() => {
-  console.log('⏰ Starting Schedulers...');
-  startSchedulers();
-  
-  // ✅ INSTANT SYNC TRIGGER: Server start hote hi ratings update karega
-  const googlePlaces = require('./services/googlePlaces');
-  googlePlaces.updateAllGoogleRatings().then((res) => {
-    console.log("🌟 Force Update Result:", res.message);
-  });
-});
 
 // ========== Middleware ==========
 const corsOptions = {
@@ -147,30 +136,68 @@ app.use((err, req, res, next) => {
 // ========== Start Server ==========
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-  console.log(`\n🚀 Server is running on port ${PORT}`);
-  console.log(`📍 http://localhost:${PORT}`);
-  console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
-  
-  // 🔥 ANTI-SLEEP PING LOGIC 🔥
-  const BACKEND_URL = process.env.BACKEND_URL || `http://localhost:${PORT}`; 
-  
-  setInterval(() => {
-    const protocol = BACKEND_URL.startsWith('https') ? https : http;
-    protocol.get(`${BACKEND_URL}/api/health`, (res) => {
-      console.log(`⏰ Anti-Sleep Ping: Server is awake! (Status: ${res.statusCode})`);
-    }).on('error', (err) => {
-      console.error(`❌ Anti-Sleep Ping failed:`, err.message);
-    });
-  }, 14 * 60 * 1000); // Har 14 minute mein ping karega
-  
-  console.log(`\n📚 Available Routes:`);
-  console.log(`   GET    http://localhost:${PORT}/api/hospitals`);
-  console.log(`   GET    http://localhost:${PORT}/api/tests`);
-  console.log(`✅ Ready to accept requests!\n`);
-});
+async function startServer() {
+  if (!process.env.JWT_SECRET) {
+    console.error('❌ JWT_SECRET is missing. Add a private signing secret to backend/.env.');
+    process.exitCode = 1;
+    return;
+  }
 
-// ✅ ADDED: Keep-Alive utility for production
-if (process.env.NODE_ENV === 'production') {
-  require('./utils/keepAlive');
+  try {
+    await connectDB();
+  } catch (error) {
+    console.error(`❌ ${error.message}`);
+    process.exitCode = 1;
+    return;
+  }
+
+  const server = app.listen(PORT, () => {
+    console.log('\n==================================');
+    console.log('MedNexus Hospital Management');
+    console.log('==================================');
+    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`Backend Port: ${PORT}`);
+    console.log('Server Status: Running');
+    console.log(`📍 http://localhost:${PORT}`);
+
+    console.log('\n⏰ Starting Schedulers...');
+    startSchedulers();
+
+    const googlePlaces = require('./services/googlePlaces');
+    googlePlaces.updateAllGoogleRatings()
+      .then((res) => console.log('🌟 Force Update Result:', res.message))
+      .catch((error) => console.error('❌ Google ratings sync failed:', error.message));
+
+    const BACKEND_URL = process.env.BACKEND_URL || `http://localhost:${PORT}`;
+    setInterval(() => {
+      const protocol = BACKEND_URL.startsWith('https') ? https : http;
+      protocol.get(`${BACKEND_URL}/api/health`, (res) => {
+        console.log(`⏰ Anti-Sleep Ping: Server is awake! (Status: ${res.statusCode})`);
+      }).on('error', (error) => {
+        console.error('❌ Anti-Sleep Ping failed:', error.message);
+      });
+    }, 14 * 60 * 1000);
+
+    console.log('\n📚 Available Routes:');
+    console.log(`   GET    http://localhost:${PORT}/api/hospitals`);
+    console.log(`   GET    http://localhost:${PORT}/api/tests`);
+    console.log('✅ Ready to accept requests!\n');
+
+    if (process.env.NODE_ENV === 'production') {
+      require('./utils/keepAlive');
+    }
+  });
+
+  server.on('error', async (error) => {
+    if (error.code === 'EADDRINUSE') {
+      console.error(`❌ Port ${PORT} is already in use. Stop the service using it or set another PORT in backend/.env.`);
+    } else {
+      console.error('❌ Server failed to start:', error.message);
+    }
+
+    await mongoose.disconnect().catch(() => {});
+    process.exitCode = 1;
+  });
 }
+
+startServer();
